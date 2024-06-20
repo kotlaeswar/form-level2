@@ -8,14 +8,10 @@ export default function JobApplicationForm() {
     email: '',
     phoneNumber: '',
     position: '',
-    experience: '',
-    portfolioURL: '',
+    relevantExperience: '',
+    portfolioUrl: '',
     managementExperience: '',
-    skills: {
-      JavaScript: false,
-      CSS: false,
-      Python: false,
-    },
+    additionalSkills: [],
     interviewTime: '',
   });
   const [errors, setErrors] = useState({});
@@ -26,10 +22,9 @@ export default function JobApplicationForm() {
     if (type === 'checkbox') {
       setValues({
         ...values,
-        skills: {
-          ...values.skills,
-          [name]: checked,
-        },
+        additionalSkills: checked
+          ? [...values.additionalSkills, value]
+          : values.additionalSkills.filter(skill => skill !== value),
       });
     } else {
       setValues({
@@ -57,7 +52,7 @@ export default function JobApplicationForm() {
     }
     if (!values.email) {
       errors.email = 'Email is required';
-    } else if (!/^\S+@\S+\.\S+$/.test(values.email)) {
+    } else if (!/\S+@\S+\.\S+/.test(values.email)) {
       errors.email = 'Email must be a valid email address';
     }
     if (!values.phoneNumber) {
@@ -65,21 +60,19 @@ export default function JobApplicationForm() {
     } else if (!/^\d+$/.test(values.phoneNumber)) {
       errors.phoneNumber = 'Phone Number must be a valid number';
     }
-    if ((values.position === 'Developer' || values.position === 'Designer') && !values.experience) {
-      errors.experience = 'Relevant Experience is required';
-    } else if (values.experience && values.experience <= 0) {
-      errors.experience = 'Experience must be greater than 0';
+    if ((values.position === 'Developer' || values.position === 'Designer') && !values.relevantExperience) {
+      errors.relevantExperience = 'Relevant Experience is required';
+    } else if (values.relevantExperience && values.relevantExperience <= 0) {
+      errors.relevantExperience = 'Relevant Experience must be greater than 0';
     }
-    if (values.position === 'Designer' && !values.portfolioURL) {
-      errors.portfolioURL = 'Portfolio URL is required';
-    } else if (values.portfolioURL && !/^https?:\/\/\S+$/.test(values.portfolioURL)) {
-      errors.portfolioURL = 'Portfolio URL must be a valid URL';
+    if (values.position === 'Designer' && !values.portfolioUrl) {
+      errors.portfolioUrl = 'Portfolio URL is required';
     }
     if (values.position === 'Manager' && !values.managementExperience) {
       errors.managementExperience = 'Management Experience is required';
     }
-    if (!Object.values(values.skills).some(skill => skill)) {
-      errors.skills = 'At least one skill must be selected';
+    if (!values.additionalSkills.length) {
+      errors.additionalSkills = 'At least one additional skill must be selected';
     }
     if (!values.interviewTime) {
       errors.interviewTime = 'Preferred Interview Time is required';
@@ -93,14 +86,10 @@ export default function JobApplicationForm() {
       email: '',
       phoneNumber: '',
       position: '',
-      experience: '',
-      portfolioURL: '',
+      relevantExperience: '',
+      portfolioUrl: '',
       managementExperience: '',
-      skills: {
-        JavaScript: false,
-        CSS: false,
-        Python: false,
-      },
+      additionalSkills: [],
       interviewTime: '',
     });
     setErrors({});
@@ -115,7 +104,6 @@ export default function JobApplicationForm() {
           name="fullName"
           value={values.fullName}
           onChange={handleChange}
-          required
         />
         {errors.fullName && <p className="error">{errors.fullName}</p>}
       </div>
@@ -126,7 +114,6 @@ export default function JobApplicationForm() {
           name="email"
           value={values.email}
           onChange={handleChange}
-          required
         />
         {errors.email && <p className="error">{errors.email}</p>}
       </div>
@@ -137,31 +124,29 @@ export default function JobApplicationForm() {
           name="phoneNumber"
           value={values.phoneNumber}
           onChange={handleChange}
-          required
         />
         {errors.phoneNumber && <p className="error">{errors.phoneNumber}</p>}
       </div>
       <div>
         <label>Applying for Position</label>
-        <select name="position" value={values.position} onChange={handleChange} required>
+        <select name="position" value={values.position} onChange={handleChange}>
           <option value="">Select</option>
           <option value="Developer">Developer</option>
           <option value="Designer">Designer</option>
           <option value="Manager">Manager</option>
         </select>
+        {errors.position && <p className="error">{errors.position}</p>}
       </div>
       {(values.position === 'Developer' || values.position === 'Designer') && (
         <div>
           <label>Relevant Experience (years)</label>
           <input
             type="number"
-            name="experience"
-            value={values.experience}
+            name="relevantExperience"
+            value={values.relevantExperience}
             onChange={handleChange}
-            min="1"
-            required
           />
-          {errors.experience && <p className="error">{errors.experience}</p>}
+          {errors.relevantExperience && <p className="error">{errors.relevantExperience}</p>}
         </div>
       )}
       {values.position === 'Designer' && (
@@ -169,12 +154,11 @@ export default function JobApplicationForm() {
           <label>Portfolio URL</label>
           <input
             type="text"
-            name="portfolioURL"
-            value={values.portfolioURL}
+            name="portfolioUrl"
+            value={values.portfolioUrl}
             onChange={handleChange}
-            required
           />
-          {errors.portfolioURL && <p className="error">{errors.portfolioURL}</p>}
+          {errors.portfolioUrl && <p className="error">{errors.portfolioUrl}</p>}
         </div>
       )}
       {values.position === 'Manager' && (
@@ -185,7 +169,6 @@ export default function JobApplicationForm() {
             name="managementExperience"
             value={values.managementExperience}
             onChange={handleChange}
-            required
           />
           {errors.managementExperience && <p className="error">{errors.managementExperience}</p>}
         </div>
@@ -196,8 +179,9 @@ export default function JobApplicationForm() {
           <label>
             <input
               type="checkbox"
-              name="JavaScript"
-              checked={values.skills.JavaScript}
+              name="additionalSkills"
+              value="JavaScript"
+              checked={values.additionalSkills.includes('JavaScript')}
               onChange={handleChange}
             />
             JavaScript
@@ -205,8 +189,9 @@ export default function JobApplicationForm() {
           <label>
             <input
               type="checkbox"
-              name="CSS"
-              checked={values.skills.CSS}
+              name="additionalSkills"
+              value="CSS"
+              checked={values.additionalSkills.includes('CSS')}
               onChange={handleChange}
             />
             CSS
@@ -214,14 +199,15 @@ export default function JobApplicationForm() {
           <label>
             <input
               type="checkbox"
-              name="Python"
-              checked={values.skills.Python}
+              name="additionalSkills"
+              value="Python"
+              checked={values.additionalSkills.includes('Python')}
               onChange={handleChange}
             />
             Python
           </label>
         </div>
-        {errors.skills && <p className="error">{errors.skills}</p>}
+        {errors.additionalSkills && <p className="error">{errors.additionalSkills}</p>}
       </div>
       <div>
         <label>Preferred Interview Time</label>
@@ -230,7 +216,6 @@ export default function JobApplicationForm() {
           name="interviewTime"
           value={values.interviewTime}
           onChange={handleChange}
-          required
         />
         {errors.interviewTime && <p className="error">{errors.interviewTime}</p>}
       </div>
