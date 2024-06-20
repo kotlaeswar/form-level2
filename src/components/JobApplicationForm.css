@@ -1,0 +1,30 @@
+.form {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+  }
+  
+  .form div {
+    margin-bottom: 15px;
+  }
+  
+  .form label {
+    display: block;
+    font-weight: bold;
+  }
+  
+  .form input,
+  .form select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    box-sizing: border-box;
+  }
+  
+  .form .error {
+    color: red;
+    font-size: 0.875em;
+  }
+  
