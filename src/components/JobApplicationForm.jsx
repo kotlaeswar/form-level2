@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './JobApplicationForm.css';
 
-export default function JobApplicationForm() {
+export default function JobApplicationForm({ setFormData }) {
   const [values, setValues] = useState({
     fullName: '',
     email: '',
@@ -38,7 +38,8 @@ export default function JobApplicationForm() {
     e.preventDefault();
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length === 0) {
-      navigate('/summary', { state: { formData: values } });
+      setFormData(values);
+      navigate('/summary');
       resetForm();
     } else {
       setErrors(validationErrors);
@@ -198,9 +199,6 @@ export default function JobApplicationForm() {
           </label>
           <label>
             <input
-            //  className="custom-checkbox"
-             className="checkmark"
-
               type="checkbox"
               name="additionalSkills"
               value="Python"
@@ -222,7 +220,7 @@ export default function JobApplicationForm() {
         />
         {errors.interviewTime && <p className="error">{errors.interviewTime}</p>}
       </div>
-     <center> <button type="submit">Submit</button></center>
+      <center><button type="submit">Submit</button></center>
     </form>
   );
 }

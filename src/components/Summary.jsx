@@ -1,13 +1,10 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import './Summary.css';
 
-export default function Summary() {
-  const location = useLocation();
-  const formData = location.state?.formData;
-
+export default function Summary({ formData }) {
   if (!formData) {
-    return <div className="summary">No data available.</div>;
+    return <Navigate to="/" />;
   }
 
   return (
@@ -26,7 +23,7 @@ export default function Summary() {
       {formData.position === 'Manager' && (
         <p><strong>Management Experience:</strong> {formData.managementExperience}</p>
       )}
-      <p><strong>Additional Skills:</strong> {formData.additionalSkills.length > 0 ? formData.additionalSkills.join(', ') : 'None'}</p>
+      <p><strong>Additional Skills:</strong> {formData.additionalSkills.join(', ')}</p>
       <p><strong>Preferred Interview Time:</strong> {formData.interviewTime}</p>
     </div>
   );

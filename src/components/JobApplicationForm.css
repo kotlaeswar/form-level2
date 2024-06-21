@@ -1,7 +1,12 @@
-body{
-background-color: honeydew;
-}
 
+body {
+  background-color: honeydew;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
 .form {
   max-width: 600px;
   margin: auto;
@@ -18,6 +23,7 @@ background-color: honeydew;
 
 .form div {
   margin-bottom: 15px;
+  width: 500px;
 }
 
 button {
