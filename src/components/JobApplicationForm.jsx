@@ -198,6 +198,9 @@ export default function JobApplicationForm() {
           </label>
           <label>
             <input
+            //  className="custom-checkbox"
+             className="checkmark"
+
               type="checkbox"
               name="additionalSkills"
               value="Python"
@@ -219,7 +222,7 @@ export default function JobApplicationForm() {
         />
         {errors.interviewTime && <p className="error">{errors.interviewTime}</p>}
       </div>
-      <button type="submit">Submit</button>
+     <center> <button type="submit">Submit</button></center>
     </form>
   );
 }
